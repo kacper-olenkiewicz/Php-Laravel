@@ -15,7 +15,7 @@ class CategoryFactory extends Factory
         
         return [
             'rental_id' => $rentalId,
-            'name' => $this->faker->unique()->randomElement(['Narty', 'Rowery', 'Kajaki', 'Deski SUP', 'Sprzęt wspinaczkowy']) . ' ' . $this->faker->word(),
+            'name' => $this->faker->randomElement(['Narty', 'Rowery', 'Kajaki', 'Deski SUP', 'Sprzęt wspinaczkowy']) . ' ' . $this->faker->word(),
             'description' => $this->faker->sentence(10),
         ];
     }
