@@ -1,14 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Client\ProductList;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Client\BookingController;
-use App\Http\Controllers\Admin\RentalController;
+
+// Import kontrolerów Rentala
 use App\Http\Controllers\Rental\DashboardController as RentalDashboard;
+use App\Http\Controllers\Rental\ProductController;
+use App\Http\Controllers\Rental\CategoryController;
+use App\Http\Controllers\Rental\BookingController as RentalBookingController;
+use App\Http\Controllers\Rental\PaymentController;
+
+// Import kontrolerów Admina
+use App\Http\Controllers\Admin\RentalController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 
 
-Route::get('/', ProductList::class)->name('products.index');
+// Strona główna z katalogiem produktów
+Route::get('/', [HomeController::class, 'index'])->name('products.index');
+
 Route::get('/dashboard', function () {
     
     if (auth()->check()) {
@@ -34,7 +44,7 @@ Route::middleware(['auth', 'role:Customer|SuperAdmin'])->group(function () {
 
 
 Route::middleware(['auth', 'scope.rental', 'role:RentalOwner|Employee|SuperAdmin'])->prefix('rental')->name('rental.')->group(function () {
-    Route::get('/dashboard', RentalDashboard::class)->name('dashboard');
+    Route::get('/dashboard', [RentalDashboard::class, 'index'])->name('dashboard');
 
     
     Route::middleware('permission:manage products')->group(function () {
@@ -46,6 +56,8 @@ Route::middleware(['auth', 'scope.rental', 'role:RentalOwner|Employee|SuperAdmin
     Route::middleware('permission:manage bookings|process payments')->group(function () {
         Route::resource('bookings', \App\Http\Controllers\Rental\BookingController::class);
         Route::resource('payments', \App\Http\Controllers\Rental\PaymentController::class)->only(['index', 'update']);
+        Route::post('payments/{payment}/confirm', [\App\Http\Controllers\Rental\PaymentController::class, 'confirm'])->name('payments.confirm');
+        Route::post('bookings/{booking}/payment', [\App\Http\Controllers\Rental\PaymentController::class, 'store'])->name('bookings.payment.store');
     });
 
     
@@ -53,7 +65,7 @@ Route::middleware(['auth', 'scope.rental', 'role:RentalOwner|Employee|SuperAdmin
 
 
 Route::middleware(['auth', 'role:SuperAdmin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
+    Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
 
     
     Route::resource('rentals', RentalController::class);

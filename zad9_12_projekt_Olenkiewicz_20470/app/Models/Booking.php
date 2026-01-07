@@ -13,7 +13,7 @@ class Booking extends Model
 {
     use HasFactory, SoftDeletes, HasRentalScope; 
 
-    protected $fillable = ['rental_id', 'user_id', 'start_date', 'end_date', 'status', 'total_amount'];
+    protected $fillable = ['rental_id', 'user_id', 'start_date', 'end_date', 'status', 'total_amount', 'notes'];
     
     protected $casts = [
         'start_date' => 'datetime',

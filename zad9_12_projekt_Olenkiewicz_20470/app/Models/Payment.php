@@ -11,7 +11,11 @@ class Payment extends Model
 {
     use HasFactory, SoftDeletes, HasRentalScope; 
 
-    protected $fillable = ['booking_id', 'user_id', 'amount', 'method', 'transaction_id', 'status'];
+    protected $fillable = ['booking_id', 'user_id', 'amount', 'method', 'transaction_id', 'status', 'paid_at'];
+    
+    protected $casts = [
+        'paid_at' => 'datetime',
+    ];
     
     public function rental(): BelongsTo
     {

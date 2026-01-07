@@ -34,4 +34,14 @@ class Rental extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    /**
+     * Właściciel wypożyczalni (użytkownik z rolą RentalOwner)
+     */
+    public function owner()
+    {
+        return $this->hasOne(User::class)->whereHas('roles', function ($query) {
+            $query->where('name', 'RentalOwner');
+        });
+    }
 }
