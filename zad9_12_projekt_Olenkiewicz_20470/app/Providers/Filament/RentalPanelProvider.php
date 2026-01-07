@@ -1,6 +1,9 @@
 <?php
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\Categories\CategoryResource;
+use App\Filament\Resources\Products\ProductResource;
+use App\Http\Middleware\ScopeByRental;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -17,7 +20,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Http\Middleware\ScopeByRental; // Import naszego middleware!
 
 class RentalPanelProvider extends PanelProvider
 {
@@ -26,13 +28,17 @@ class RentalPanelProvider extends PanelProvider
         return $panel
             
             ->id('rental')
-            ->path('rental') 
+            ->path('rental-panel') 
             ->login()
             ->colors([
                 'primary' => Color::Green, 
             ])
             
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
+            ->resources([
+                CategoryResource::class,
+                ProductResource::class,
+            ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,

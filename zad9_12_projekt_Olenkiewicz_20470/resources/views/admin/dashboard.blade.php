@@ -105,24 +105,34 @@
                 </div>
             </div>
 
-            <!-- Szybkie akcje -->
+            <!-- Najnowsi klienci -->
             <div class="col-lg-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0"><i class="bi bi-lightning me-2"></i>Szybkie akcje</h5>
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="bi bi-people me-2"></i>Najnowsi klienci</h5>
+                        <span class="badge bg-light text-primary">{{ $totalCustomers }}</span>
                     </div>
-                    <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('admin.rentals.create') }}" class="btn btn-primary">
-                                <i class="bi bi-plus-lg me-2"></i>Nowa wypożyczalnia
-                            </a>
-                            <a href="{{ route('admin.rentals.index') }}" class="btn btn-outline-primary">
-                                <i class="bi bi-buildings me-2"></i>Zarządzaj wypożyczalniami
-                            </a>
-                            <a href="/admin" class="btn btn-outline-secondary">
-                                <i class="bi bi-gear me-2"></i>Panel Filament
-                            </a>
-                        </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            @forelse($recentClients ?? [] as $client)
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ $client->name }}</strong>
+                                        <div class="text-muted small">{{ $client->email }}</div>
+                                    </div>
+                                    <span class="badge bg-light text-dark">{{ $client->bookings_count }} rez.</span>
+                                </li>
+                            @empty
+                                <li class="list-group-item text-center text-muted py-4">
+                                    Brak klientów
+                                </li>
+                            @endforelse
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-white text-end">
+                        <a href="{{ route('admin.clients.index') }}" class="btn btn-sm btn-outline-primary">
+                            Zarządzaj klientami
+                        </a>
                     </div>
                 </div>
             </div>

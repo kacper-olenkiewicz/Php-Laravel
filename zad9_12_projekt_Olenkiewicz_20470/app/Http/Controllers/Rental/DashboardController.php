@@ -29,12 +29,18 @@ class DashboardController extends Controller
                                    ->groupBy('status')
                                    ->get();
 
+        $recentBookings = Booking::with('user')
+                                 ->orderByDesc('created_at')
+                                 ->take(5)
+                                 ->get();
+
         return view('rental.dashboard', compact(
             'totalBookings',
             'pendingBookings',
             'recentRevenue',
             'totalProducts',
-            'bookingsByStatus'
+            'bookingsByStatus',
+            'recentBookings'
         ));
     }
 }

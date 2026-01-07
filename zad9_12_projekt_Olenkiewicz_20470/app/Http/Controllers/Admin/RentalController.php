@@ -12,7 +12,9 @@ class RentalController extends Controller
 {
     public function index()
     {
-        $rentals = Rental::with('owner')->paginate(10);
+        $rentals = Rental::with('owner')
+            ->withCount(['products', 'bookings'])
+            ->paginate(10);
         return view('admin.rentals.index', compact('rentals'));
     }
 

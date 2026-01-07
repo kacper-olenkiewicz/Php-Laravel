@@ -167,16 +167,10 @@
                     @foreach($products as $product)
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100 shadow-sm card-hover">
-                                @if($product->image_path)
-                                    <img src="{{ asset('storage/' . $product->image_path) }}" 
-                                         class="card-img-top" 
-                                         alt="{{ $product->name }}"
-                                         style="height: 200px; object-fit: cover;">
-                                @else
-                                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
-                                        <i class="bi bi-image" style="font-size: 4rem; opacity: 0.5;"></i>
-                                    </div>
-                                @endif
+                                <img src="{{ $product->preview_image_url }}" 
+                                     class="card-img-top" 
+                                     alt="{{ $product->name }}"
+                                     style="height: 200px; object-fit: cover;">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <h5 class="card-title mb-0">{{ $product->name }}</h5>

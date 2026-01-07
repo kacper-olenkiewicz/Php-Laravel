@@ -8,7 +8,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('rental.products.store') }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('rental.products.store') }}">
                             @csrf
 
                             <div class="mb-3">
@@ -70,10 +70,12 @@
                             </div>
 
                             <div class="mb-4">
-                                <label for="image" class="form-label">Zdjęcie produktu</label>
-                                <input type="file" class="form-control @error('image') is-invalid @enderror" 
-                                       id="image" name="image" accept="image/*">
-                                @error('image')
+                                <label for="image_url" class="form-label">Link do zdjęcia</label>
+                                <input type="url" class="form-control @error('image_url') is-invalid @enderror"
+                                       id="image_url" name="image_url" value="{{ old('image_url') }}"
+                                       placeholder="https://example.com/zdjecie.jpg">
+                                <small class="text-muted">Wklej adres URL zdjęcia (opcjonalnie).</small>
+                                @error('image_url')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

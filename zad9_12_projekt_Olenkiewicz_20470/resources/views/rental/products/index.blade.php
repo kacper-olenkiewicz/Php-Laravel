@@ -27,16 +27,10 @@
                             @forelse($products as $product)
                                 <tr>
                                     <td>
-                                        @if($product->image_path)
-                                            <img src="{{ asset('storage/' . $product->image_path) }}" 
-                                                 alt="{{ $product->name }}" 
-                                                 class="rounded"
-                                                 style="width: 50px; height: 50px; object-fit: cover;">
-                                        @else
-                                            <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                                <i class="bi bi-image text-white"></i>
-                                            </div>
-                                        @endif
+                                        <img src="{{ $product->preview_image_url }}" 
+                                             alt="{{ $product->name }}" 
+                                             class="rounded"
+                                             style="width: 50px; height: 50px; object-fit: cover;">
                                     </td>
                                     <td>
                                         <strong>{{ $product->name }}</strong>

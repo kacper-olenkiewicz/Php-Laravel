@@ -86,6 +86,11 @@
                                         <i class="bi bi-buildings me-2"></i>Wypożyczalnie
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.clients.index') }}">
+                                        <i class="bi bi-people me-2"></i>Klienci
+                                    </a>
+                                </li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item" href="/admin">

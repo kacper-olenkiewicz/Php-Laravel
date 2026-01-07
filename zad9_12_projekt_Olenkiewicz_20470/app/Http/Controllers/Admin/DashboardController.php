@@ -37,13 +37,20 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        $recentClients = User::role('Customer')
+            ->withCount('bookings')
+            ->latest()
+            ->take(5)
+            ->get();
+
         return view('admin.dashboard', compact(
             'totalRentals',
             'totalCustomers',
             'totalOwners',
             'recentGlobalRevenue',
             'pendingGlobalBookings',
-            'topRentalsByRevenue'
+            'topRentalsByRevenue',
+            'recentClients'
         ));
     }
 }

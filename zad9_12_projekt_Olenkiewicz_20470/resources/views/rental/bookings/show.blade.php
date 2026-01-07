@@ -103,15 +103,6 @@
                             <a href="{{ route('rental.bookings.edit', $booking) }}" class="btn btn-primary">
                                 <i class="bi bi-pencil me-1"></i>Edytuj rezerwację
                             </a>
-                            @if(!$booking->payment)
-                                <form method="POST" action="{{ route('rental.bookings.payment.store', $booking) }}">
-                                    @csrf
-                                    <input type="hidden" name="method" value="cash">
-                                    <button type="submit" class="btn btn-success w-100">
-                                        <i class="bi bi-credit-card me-1"></i>Dodaj płatność
-                                    </button>
-                                </form>
-                            @endif
                         </div>
                     </div>
                 </div>

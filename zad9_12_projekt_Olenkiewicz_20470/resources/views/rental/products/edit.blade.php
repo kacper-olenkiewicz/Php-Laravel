@@ -8,7 +8,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('rental.products.update', $product) }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('rental.products.update', $product) }}">
                             @csrf
                             @method('PUT')
 
@@ -73,19 +73,22 @@
 
                             <div class="mb-4">
                                 <label for="image" class="form-label">Zdjęcie produktu</label>
-                                @if($product->image_path)
-                                    <div class="mb-2">
-                                        <img src="{{ asset('storage/' . $product->image_path) }}" 
-                                             alt="{{ $product->name }}" class="rounded" style="max-height: 100px;">
-                                        <small class="text-muted d-block">Obecne zdjęcie</small>
-                                    </div>
-                                @endif
-                                <input type="file" class="form-control @error('image') is-invalid @enderror" 
-                                       id="image" name="image" accept="image/*">
-                                <small class="text-muted">Pozostaw puste, aby zachować obecne zdjęcie</small>
-                                @error('image')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <div class="mb-2">
+                                    <img src="{{ $product->preview_image_url }}" 
+                                         alt="{{ $product->name }}" class="rounded" style="max-height: 100px;">
+                                    <small class="text-muted d-block">Obecne zdjęcie</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="image_url" class="form-label">Link do zdjęcia</label>
+                                    <input type="url" class="form-control @error('image_url') is-invalid @enderror"
+                                           id="image_url" name="image_url"
+                                           value="{{ old('image_url', filter_var($product->image_path, FILTER_VALIDATE_URL) ? $product->image_path : '') }}"
+                                           placeholder="https://example.com/zdjecie.jpg">
+                                    <small class="text-muted">Podaj adres URL nowego zdjęcia (pozostaw puste, aby nic nie zmieniać).</small>
+                                    @error('image_url')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <hr>

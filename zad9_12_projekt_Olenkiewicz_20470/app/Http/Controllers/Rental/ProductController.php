@@ -2,9 +2,10 @@
 namespace App\Http\Controllers\Rental;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -29,13 +30,14 @@ class ProductController extends Controller
             'daily_price' => 'required|numeric|min:0.01',
             'stock_quantity' => 'required|integer|min:0',
             'category_ids' => 'array',
-            'image' => 'nullable|image|max:2048', // Dodaj walidację obrazu
+            'image_url' => 'nullable|url|max:2048',
         ]);
 
-        // Domyślna obsługa obrazów
-        if ($request->hasFile('image')) {
-            $validated['image_path'] = $request->file('image')->store('products', 'public');
+        if (! empty($validated['image_url'])) {
+            $validated['image_path'] = $validated['image_url'];
         }
+
+        unset($validated['image_url']);
 
         // rental_id zostanie automatycznie ustawione przez HasRentalScope
         $product = Product::create($validated);
@@ -59,16 +61,17 @@ class ProductController extends Controller
             'daily_price' => 'required|numeric|min:0.01',
             'stock_quantity' => 'required|integer|min:0',
             'category_ids' => 'array',
-            'image' => 'nullable|image|max:2048',
+            'image_url' => 'nullable|url|max:2048',
         ]);
 
-        // Domyślna obsługa obrazów (usuń stary, jeśli nowy został wgrany)
-        if ($request->hasFile('image')) {
-            if ($product->image_path) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+        if (! empty($validated['image_url'])) {
+            if ($product->image_path && ! filter_var($product->image_path, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($product->image_path);
             }
-            $validated['image_path'] = $request->file('image')->store('products', 'public');
+            $validated['image_path'] = $validated['image_url'];
         }
+
+        unset($validated['image_url']);
 
         $product->update($validated);
         $product->categories()->sync($validated['category_ids'] ?? []);
@@ -84,8 +87,8 @@ class ProductController extends Controller
         }
 
         // Usuń zdjęcie
-        if ($product->image_path) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($product->image_path);
+        if ($product->image_path && ! filter_var($product->image_path, FILTER_VALIDATE_URL)) {
+            Storage::disk('public')->delete($product->image_path);
         }
 
         $product->delete();

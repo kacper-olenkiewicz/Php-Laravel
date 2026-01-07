@@ -14,6 +14,7 @@ use App\Http\Controllers\Rental\PaymentController;
 // Import kontrolerów Admina
 use App\Http\Controllers\Admin\RentalController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Admin\ClientController;
 
 
 // Strona główna z katalogiem produktów
@@ -69,6 +70,7 @@ Route::middleware(['auth', 'role:SuperAdmin'])->prefix('admin')->name('admin.')-
 
     
     Route::resource('rentals', RentalController::class);
+    Route::resource('clients', ClientController::class)->only(['index', 'destroy']);
    
 });
 

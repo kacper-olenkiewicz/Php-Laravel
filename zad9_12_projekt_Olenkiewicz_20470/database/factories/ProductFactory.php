@@ -16,6 +16,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentence(15),
             'daily_price' => $this->faker->randomFloat(2, 15, 150),
             'stock_quantity' => $this->faker->numberBetween(5, 50),
+            'image_path' => Product::randomPlaceholderImage(),
             'deleted_at' => $this->faker->boolean(10) ? now() : null,
         ];
     }
