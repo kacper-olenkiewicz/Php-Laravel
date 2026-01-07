@@ -1,0 +1,156 @@
+================================================================================
+                    DOKUMENTACJA TESTÓW JEDNOSTKOWYCH I FEATURE
+                    System Wypożyczalni Sprzętu - Laravel 12
+================================================================================
+
+Testy znajdują się w katalogu /tests i są podzielone na dwa rodzaje:
+- Unit (jednostkowe) - testują pojedyncze klasy/metody bez bazy danych
+- Feature (funkcjonalne) - testują całe żądania HTTP z bazą danych
+
+================================================================================
+                              TESTY JEDNOSTKOWE (UNIT)
+================================================================================
+
+Lokalizacja: tests/Unit/
+
+--------------------------------------------------------------------------------
+1. ProductTest.php - Testy modelu Product (Produkt)
+--------------------------------------------------------------------------------
+
+Test 1: test_placeholder_image_contains_picsum_url
+    Co testuje:  Sprawdza czy metoda placeholderImageFor() zwraca poprawny URL
+    Jak działa: 
+        - Wywołuje Product::placeholderImageFor(1) z dowolnym ID
+        - Sprawdza czy zwrócony string zawiera 'picsum.photos'
+    Asercja:    assertStringContainsString('picsum.photos', $placeholder)
+    Cel:        Upewnić się, że placeholder obrazka pochodzi z serwisu Picsum
+
+Test 2: test_placeholder_returns_different_images_for_different_ids
+    Co testuje:  Sprawdza czy różne ID produktów dają różne obrazy placeholder
+    Jak działa:
+        - Wywołuje placeholderImageFor(1) i placeholderImageFor(5)
+        - Porównuje oba zwrócone URL-e
+    Asercja:    assertNotEquals($image1, $image2)
+    Cel:        Każdy produkt powinien mieć unikalny placeholder (wizualne zróżnicowanie)
+
+Test 3: test_placeholder_images_array_is_not_empty
+    Co testuje:  Sprawdza czy tablica placeholderów w modelu nie jest pusta
+    Jak działa:
+        - Używa PHP Reflection do odczytu prywatnej właściwości $placeholderImages
+        - Sprawdza czy tablica istnieje i ma elementy
+    Asercje:    assertNotEmpty(), assertIsArray()
+    Cel:        Gwarantuje, że zawsze są dostępne obrazy zastępcze
+
+--------------------------------------------------------------------------------
+2. BookingTest.php - Testy modelu Booking (Rezerwacja)
+--------------------------------------------------------------------------------
+
+Test 4: test_booking_has_status_in_fillable
+    Co testuje:  Sprawdza czy model Booking ma poprawnie zdefiniowane pola $fillable
+    Jak działa:
+        - Tworzy nową instancję Booking (bez zapisu do bazy)
+        - Pobiera tablicę $fillable przez getFillable()
+        - Sprawdza obecność kluczowych pól
+    Asercje:    assertContains('status'), assertContains('total_amount'), etc.
+    Cel:        Upewnia się, że pola można masowo przypisywać (mass assignment)
+
+Test 5: test_booking_dates_are_casted_to_datetime
+    Co testuje:  Sprawdza czy daty start/end są automatycznie castowane do Carbon
+    Jak działa:
+        - Pobiera tablicę $casts z modelu przez getCasts()
+        - Sprawdza czy start_date i end_date mają typ 'datetime'
+    Asercje:    assertArrayHasKey(), assertEquals('datetime', ...)
+    Cel:        Gwarantuje poprawne operacje na datach (porównywanie, formatowanie)
+
+--------------------------------------------------------------------------------
+3. ExampleTest.php - Domyślny test Laravel
+--------------------------------------------------------------------------------
+
+Test 6: test_that_true_is_true
+    Co testuje:  Podstawowa asercja - zawsze przechodzi
+    Jak działa:
+        - Sprawdza czy true === true
+    Asercja:    assertTrue(true)
+    Cel:        Test przykładowy generowany przez Laravel, weryfikuje działanie PHPUnit
+
+================================================================================
+                            TESTY FUNKCJONALNE (FEATURE)
+================================================================================
+
+Lokalizacja: tests/Feature/
+
+--------------------------------------------------------------------------------
+1. ExampleTest.php - Test strony głównej
+--------------------------------------------------------------------------------
+
+Test 7: test_the_application_returns_a_successful_response
+    Co testuje:  Sprawdza czy strona główna (/) zwraca kod HTTP 200
+    Jak działa:
+        - Używa trait RefreshDatabase - czyści i migruje bazę testową
+        - W setUp() uruchamia RolePermissionSeeder (potrzebne role Spatie)
+        - Wykonuje żądanie GET na '/'
+        - Sprawdza kod odpowiedzi
+    Asercja:    assertStatus(200)
+    Cel:        Weryfikuje, że aplikacja uruchamia się poprawnie i wyświetla stronę
+
+================================================================================
+                           JAK URUCHAMIAĆ TESTY
+================================================================================
+
+# Wszystkie testy (Unit + Feature):
+php artisan test
+
+# Tylko testy jednostkowe:
+php artisan test --filter=Unit
+
+# Tylko testy funkcjonalne:
+php artisan test --filter=Feature
+
+# Konkretny plik:
+php artisan test tests/Unit/ProductTest.php
+
+# Konkretny test:
+php artisan test --filter=test_placeholder_image_contains_picsum_url
+
+# Z szczegółowym outputem:
+php artisan test --verbose
+
+# Przez PHPUnit bezpośrednio:
+./vendor/bin/phpunit
+
+================================================================================
+                         STRUKTURA PLIKÓW TESTOWYCH
+================================================================================
+
+tests/
+├── TestCase.php              # Bazowa klasa dla wszystkich testów
+├── TESTY_OPIS.txt            # Ten plik - dokumentacja
+├── Feature/
+│   └── ExampleTest.php       # Test HTTP strony głównej (1 test)
+└── Unit/
+    ├── ExampleTest.php       # Domyślny test Laravel (1 test)
+    ├── ProductTest.php       # Testy modelu Product (3 testy)
+    └── BookingTest.php       # Testy modelu Booking (2 testy)
+
+================================================================================
+                              PODSUMOWANIE
+================================================================================
+
+Łączna liczba testów:        7
+- Testy jednostkowe (Unit):  6
+- Testy funkcjonalne:        1
+
+Testy własne (biznesowe):    5 (3 Product + 2 Booking)
+Testy domyślne Laravel:      2 (1 Unit + 1 Feature)
+
+Łączna liczba asercji:       14
+
+================================================================================
+                                 AUTOR
+================================================================================
+
+Olenkiewicz - nr albumu 20470
+Projekt: System Wypożyczalni Sprzętu (Laravel 12)
+Data: Styczeń 2026
+
+================================================================================
